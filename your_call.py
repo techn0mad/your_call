@@ -123,9 +123,7 @@ class Result:  # pylint: disable=too-many-instance-attributes
 # ----------------------------------------------------------------------
 
 def split_callsign(callsign):
-    """Split callsign into prefix and suffix."""
-    """
-    Split VE7HTE -> ("VE7", "HTE").
+    """Split callsign into prefix and suffix.
 
     Assumes the prefix terminates with the first digit.
     """
@@ -143,15 +141,12 @@ def split_callsign(callsign):
 # ----------------------------------------------------------------------
 
 def morse_elements(text):
-    """Number of dots and dashes."""
-
+    """Calculate number of dots and dashes."""
     return sum(len(MORSE[c]) for c in text)
 
 
 def morse_character_units(c):
-    """Calculate CW character element lengths."""
-    """
-    Morse duration of one character.
+    """Calculate morse duration of one character.
 
     dot                = 1 unit
     dash               = 3 units
@@ -171,11 +166,7 @@ def morse_character_units(c):
 
 
 def morse_units(text):
-    """Calculate total CW duration, including inter-character gaps."""
-    """
-    Total Morse duration including 3-unit inter-character gaps.
-    """
-
+    """Calculate total Morse duration including 3-unit inter-character gaps."""
     if not text:
         return 0
 
@@ -194,7 +185,7 @@ def morse_units(text):
 # ----------------------------------------------------------------------
 
 def leading_run(code):
-    """Length of the identical-element run at start of Morse code."""
+    """Calculate length of the identical-element run at start of Morse code."""
 
     first = code[0]
     count = 0
@@ -208,7 +199,7 @@ def leading_run(code):
 
 
 def trailing_run(code):
-    """Length of the identical-element run at end of Morse code."""
+    """Calculate length of the identical-element run at end of Morse code."""
 
     last = code[-1]
     count = 0
@@ -222,9 +213,7 @@ def trailing_run(code):
 
 
 def boundary_contrast(suffix):
-    """Calculate CW polarity changes."""
-    """
-    Fraction of character boundaries where Morse polarity changes.
+    """Calculate fraction of character boundaries where Morse polarity changes.
 
     HTE:
         .... | -    contrast
@@ -255,7 +244,7 @@ def boundary_contrast(suffix):
 
 
 def boundary_run_penalty(suffix):
-    """Calculate runs of identical CW elements crossing character boundaries."""
+    """Calculate runs of identical CW elements crossing character boundaries.
 
     Example:
 
@@ -288,9 +277,7 @@ def boundary_run_penalty(suffix):
 # ----------------------------------------------------------------------
 
 def morse_distance(a, b):
-    """Calculate structual distance between two morse characters."""
-    """
-    Simple structural distance between two Morse characters.
+    """Calculate simple structural distance between two Morse characters.
 
     This is not yet a true Morse edit-distance model.
     """
@@ -309,8 +296,8 @@ def morse_distance(a, b):
 
 
 def cw_rhythm_raw(suffix):
-    """Calculate CW 'rhythm'."""
-    """
+    """Calculate CW 'rhythm'.
+    
     Average structural contrast between adjacent Morse characters.
     """
 
@@ -345,8 +332,8 @@ def phonetic_string(text):
 
 
 def phonetic_contrast_raw(suffix):
-    """Calculate the phonetic distinctiveness of a call."""
-    """
+    """Calculate the phonetic distinctiveness of a call.
+
     V1 phonetic-distinctiveness heuristic.
 
     Reward different phonetic words and penalize repeated letters.
@@ -368,9 +355,7 @@ def phonetic_contrast_raw(suffix):
 # ----------------------------------------------------------------------
 
 def prefix_repeats(prefix, suffix):
-    """Return the number of suffix characters also present in the prefix."""
-    """
-    Number of suffix characters also appearing in the prefix.
+    """Calculate the number of suffix characters also appearing in the prefix.
 
     VE7OL -> 0
     VE7LV -> 1
@@ -385,8 +370,8 @@ def prefix_repeats(prefix, suffix):
 
 
 def count_adjacent_duplicates(text):
-    """Return the number of adjacent duplicate-character boundaries."""
-    """
+    """Calculate the number of adjacent duplicate-character boundaries.
+
     UEE -> one adjacent duplicate.
     EEE -> two adjacent duplicate boundaries.
     """
@@ -402,8 +387,8 @@ def count_adjacent_duplicates(text):
 # ----------------------------------------------------------------------
 
 def lower_is_better(value, minimum, maximum):
-    """Normalize a value to 0..100 where lower is better."""
-    """
+    """Normalize a value to 0..100 where lower is better.
+
     Convert a metric where lower is better into 0..100.
     """
 
@@ -417,8 +402,8 @@ def lower_is_better(value, minimum, maximum):
 
 
 def higher_is_better(value, minimum, maximum):
-    """Normalize a value to 0..100 where higher is better."""
-    """
+    """Normalize a value to 0..100 where higher is better.
+
     Convert a metric where higher is better into 0..100.
     """
 
@@ -436,8 +421,8 @@ def higher_is_better(value, minimum, maximum):
 # ----------------------------------------------------------------------
 
 def memorability_raw(suffix):
-    """Generate a memorability heuristic value."""
-    """
+    """Generate a memorability heuristic value.
+
     Conservative V1 memorability heuristic.
 
     Rewards:
@@ -776,7 +761,7 @@ def main():
 
     args = parser.parse_args()
 
-    with open(args.file) as f:
+    with open(args.file, encoding="utf-8") as f:
 
         callsigns = [
             line.strip().upper()
