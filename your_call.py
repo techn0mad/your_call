@@ -743,6 +743,7 @@ def print_detail(result):
 
 def main():
     """Mainline."""
+
     parser = argparse.ArgumentParser(
         description=(
             "Rank amateur-radio callsigns for CW and voice."
