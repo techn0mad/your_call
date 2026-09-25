@@ -95,7 +95,9 @@ assert abs(sum(WEIGHTS.values()) - 1.0) < 1e-9
 # ----------------------------------------------------------------------
 
 @dataclass
-class Result:
+class Result:  # pylint: disable=too-many-instance-attributes
+    """Scoring measurements and results for a single callsign."""
+
     callsign: str
     prefix: str
     suffix: str
@@ -121,6 +123,7 @@ class Result:
 # ----------------------------------------------------------------------
 
 def split_callsign(callsign):
+    """Split callsign into prefix and suffix."""
     """
     Split VE7HTE -> ("VE7", "HTE").
 
@@ -146,6 +149,7 @@ def morse_elements(text):
 
 
 def morse_character_units(c):
+    """Calculate CW character element lengths."""
     """
     Morse duration of one character.
 
@@ -167,6 +171,7 @@ def morse_character_units(c):
 
 
 def morse_units(text):
+    """Calculate total CW duration, including inter-character gaps."""
     """
     Total Morse duration including 3-unit inter-character gaps.
     """
@@ -217,6 +222,7 @@ def trailing_run(code):
 
 
 def boundary_contrast(suffix):
+    """Calculate CW polarity changes."""
     """
     Fraction of character boundaries where Morse polarity changes.
 
@@ -249,8 +255,7 @@ def boundary_contrast(suffix):
 
 
 def boundary_run_penalty(suffix):
-    """
-    Measure runs of identical elements crossing character boundaries.
+    """Calculate runs of identical CW elements crossing character boundaries."""
 
     Example:
 
@@ -283,6 +288,7 @@ def boundary_run_penalty(suffix):
 # ----------------------------------------------------------------------
 
 def morse_distance(a, b):
+    """Calculate structual distance between two morse characters."""
     """
     Simple structural distance between two Morse characters.
 
@@ -303,6 +309,7 @@ def morse_distance(a, b):
 
 
 def cw_rhythm_raw(suffix):
+    """Calculate CW 'rhythm'."""
     """
     Average structural contrast between adjacent Morse characters.
     """
@@ -328,14 +335,17 @@ def cw_rhythm_raw(suffix):
 # ----------------------------------------------------------------------
 
 def phonetic_syllables(text):
+    """Return the total NATO phonetic syllable count for text."""
     return sum(PHONETICS[c][1] for c in text)
 
 
 def phonetic_string(text):
+    """Return text represented using NATO phonetic words."""
     return " ".join(PHONETICS[c][0] for c in text)
 
 
 def phonetic_contrast_raw(suffix):
+    """Calculate the phonetic distinctiveness of a call."""
     """
     V1 phonetic-distinctiveness heuristic.
 
@@ -358,6 +368,7 @@ def phonetic_contrast_raw(suffix):
 # ----------------------------------------------------------------------
 
 def prefix_repeats(prefix, suffix):
+    """Return the number of suffix characters also present in the prefix."""
     """
     Number of suffix characters also appearing in the prefix.
 
@@ -374,6 +385,7 @@ def prefix_repeats(prefix, suffix):
 
 
 def count_adjacent_duplicates(text):
+    """Return the number of adjacent duplicate-character boundaries."""
     """
     UEE -> one adjacent duplicate.
     EEE -> two adjacent duplicate boundaries.
@@ -390,6 +402,7 @@ def count_adjacent_duplicates(text):
 # ----------------------------------------------------------------------
 
 def lower_is_better(value, minimum, maximum):
+    """Normalize a value to 0..100 where lower is better."""
     """
     Convert a metric where lower is better into 0..100.
     """
@@ -404,6 +417,7 @@ def lower_is_better(value, minimum, maximum):
 
 
 def higher_is_better(value, minimum, maximum):
+    """Normalize a value to 0..100 where higher is better."""
     """
     Convert a metric where higher is better into 0..100.
     """
@@ -422,6 +436,7 @@ def higher_is_better(value, minimum, maximum):
 # ----------------------------------------------------------------------
 
 def memorability_raw(suffix):
+    """Generate a memorability heuristic value."""
     """
     Conservative V1 memorability heuristic.
 
@@ -452,6 +467,7 @@ def memorability_raw(suffix):
 # ----------------------------------------------------------------------
 
 def raw_analysis(callsign):
+    """Perform the raw analysis of a callsign."""
 
     prefix, suffix = split_callsign(callsign)
 
@@ -505,6 +521,7 @@ def raw_analysis(callsign):
 # ----------------------------------------------------------------------
 
 def analyze(callsigns):
+    """Analyze a set of callsigns."""
 
     raw = [
         raw_analysis(call)
@@ -640,6 +657,7 @@ def analyze(callsigns):
 # ----------------------------------------------------------------------
 
 def print_summary(results, count):
+    """Print the analysis summary for a set of callsigns."""
 
     print(
         f"{'#':>3} "
@@ -673,6 +691,7 @@ def print_summary(results, count):
 
 
 def print_detail(result):
+    """Print the detailed analysis of a callsign."""
 
     print()
     print(result.callsign)
@@ -723,7 +742,7 @@ def print_detail(result):
 # ----------------------------------------------------------------------
 
 def main():
-
+   """Mainline."""
     parser = argparse.ArgumentParser(
         description=(
             "Rank amateur-radio callsigns for CW and voice."
